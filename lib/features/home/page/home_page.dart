@@ -1,6 +1,6 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
 import 'package:clubeathleticoparanaense/common/utils/prefs.dart';
-import 'package:clubeathleticoparanaense/features/listjogadores/jogadores_list.dart';
+import 'package:clubeathleticoparanaense/features/listplayers/jogadores_list.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
