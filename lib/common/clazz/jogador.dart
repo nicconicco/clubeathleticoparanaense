@@ -11,14 +11,16 @@ class Jogador {
   final int id;
   String nome;
   String posicao;
+  String objectId;
   String urlFoto;
   String descricao;
 
-  Jogador({this.id, this.nome, this.urlFoto, this.posicao, this.descricao});
+  Jogador({this.id, this.nome, this.urlFoto, this.posicao, this.descricao, this.objectId});
 
   factory Jogador.fromJson(Map<String, dynamic> parsedJson) {
     return Jogador(
       id: parsedJson['id'] as int,
+      objectId: parsedJson['objectId'] as String,
       nome: parsedJson['nome'] as String,
       posicao: parsedJson['posicao'] as String,
       urlFoto: parsedJson['urlFoto'] as String,
@@ -32,6 +34,7 @@ class Jogador {
       "posicao": posicao,
       "urlFoto": urlFoto,
       "descricao": descricao,
+      "objectId": objectId,
     };
 
     if (id != null) {

@@ -90,6 +90,7 @@ class _JogadorPageState extends State<JogadorPage> {
           Text("Informações ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
           SizedBox(height: 10,),
           Text(jogador.descricao, style: TextStyle(fontSize: 16),),
+          Text("Id do jogador no database web: "+jogador.objectId, style: TextStyle(fontSize: 16),),
         ],
       ),
     );
