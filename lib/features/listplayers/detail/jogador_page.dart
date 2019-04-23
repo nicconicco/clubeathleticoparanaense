@@ -1,4 +1,5 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
+import 'package:clubeathleticoparanaense/features/home/api/JogadorDB.dart';
 import 'package:flutter/material.dart';
 
 class JogadorPage extends StatefulWidget {
@@ -13,6 +14,20 @@ class JogadorPage extends StatefulWidget {
 class _JogadorPageState extends State<JogadorPage> {
   get jogador => widget.jogador;
 
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    JogadorDB.getInstance().exists(jogador).then((response) {
+      setState(() {
+        _isFavorite = response;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,17 +39,30 @@ class _JogadorPageState extends State<JogadorPage> {
   }
 
   _body() {
-    return ListView(padding: EdgeInsets.all(16), children: <Widget>[
-      Container(
-        padding: EdgeInsets.only(bottom: 16),
-        child: Image.network(
-          jogador.urlFoto,
-          height: 200,
+    return Container(
+      child: ListView(padding: EdgeInsets.all(16), children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("img/cap.png"), fit: BoxFit.cover)),
+          padding: EdgeInsets.only(bottom: 16, top: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Image.network(
+                jogador.urlFoto,
+                width: 100,
+                height: 100,
+              ),
+            ],
+          ),
         ),
-      ),
-      _bloco1(),
-      _bloco2(),
-    ]);
+        Container(
+            padding: EdgeInsets.only(top: 10),
+            child: _bloco1()),
+        _bloco2(),
+      ]),
+    );
   }
 
   Row _bloco1() {
@@ -46,20 +74,22 @@ class _JogadorPageState extends State<JogadorPage> {
             children: <Widget>[
               Text(
                 jogador.nome,
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               Text(
                 jogador.posicao,
-                style: TextStyle(fontSize: 22, color: Colors.grey[500]),
+                style: TextStyle(fontSize: 16, color: Colors.grey[500]),
               )
             ],
           ),
         ),
         InkWell(
-          onTap: _onClickFavorite(),
+          onTap: () {
+            _onClickFavorite(context, jogador);
+          },
           child: Icon(
             Icons.favorite,
-            color: Colors.red,
+            color: _isFavorite ? Colors.red : Colors.grey,
             size: 36,
           ),
         ),
@@ -79,7 +109,23 @@ class _JogadorPageState extends State<JogadorPage> {
 
   _onClickShare() {}
 
-  _onClickFavorite() {}
+  Future _onClickFavorite(BuildContext context, Jogador jogador) async {
+    final db = JogadorDB.getInstance();
+
+    final exists = await db.exists(jogador);
+
+    if (exists) {
+      db.deleteJogador(jogador.objectId);
+      print("deletado com sucesso");
+    } else {
+      int id = await db.saveJogador(jogador);
+      print("id salvo com sucesso $id");
+    }
+
+    setState(() {
+      _isFavorite = !exists;
+    });
+  }
 
   _bloco2() {
     return Container(
@@ -87,10 +133,21 @@ class _JogadorPageState extends State<JogadorPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Informações ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
-          SizedBox(height: 10,),
-          Text(jogador.descricao, style: TextStyle(fontSize: 16),),
-          Text("Id do jogador no database web: "+jogador.objectId, style: TextStyle(fontSize: 16),),
+          Text(
+            "Informações ",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            jogador.descricao,
+            style: TextStyle(fontSize: 16),
+          ),
+          Text(
+            "Id do jogador no database web: " + jogador.objectId,
+            style: TextStyle(fontSize: 16),
+          ),
         ],
       ),
     );

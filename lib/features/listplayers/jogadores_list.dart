@@ -4,7 +4,6 @@ import 'package:clubeathleticoparanaense/features/home/api/jogador_api.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/detail/jogador_page.dart';
 import 'package:flutter/material.dart';
 
-
 class JogadoresListView extends StatefulWidget {
   final String posicao;
 
@@ -14,8 +13,8 @@ class JogadoresListView extends StatefulWidget {
   _JogadoresListViewState createState() => _JogadoresListViewState();
 }
 
-class _JogadoresListViewState extends State<JogadoresListView> with AutomaticKeepAliveClientMixin<JogadoresListView> {
-
+class _JogadoresListViewState extends State<JogadoresListView>
+    with AutomaticKeepAliveClientMixin<JogadoresListView> {
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -26,7 +25,6 @@ class _JogadoresListViewState extends State<JogadoresListView> with AutomaticKee
   }
 
   Container __body() {
-
     Future future = widget.posicao == ""
         ? JogadorApi.getJogadores()
         : JogadorApi.getJogadoresPorPosicao(widget.posicao);
@@ -65,46 +63,58 @@ class _JogadoresListViewState extends State<JogadoresListView> with AutomaticKee
             },
             child: Container(
               child: Card(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: <Widget>[
-                        Image.network(jogador.urlFoto),
-                        Container(
-                          color: Colors.black45,
-                          child: Center(
-                            child: Text(
-                              jogador.nome,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.white, fontSize: 25),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    ButtonTheme.bar(
-                      // make buttons use the appropriate styles for cards
-                      child: ButtonBar(
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("img/cap.png"), fit: BoxFit.cover)),
+                  padding: EdgeInsets.only(bottom: 16, top: 16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Stack(
                         children: <Widget>[
-                          FlatButton(
-                            child: const Text('DETALHES'),
-                            onPressed: () {
-                              _onClickDetails(context, jogador);
-                            },
-                          ),
-                          FlatButton(
-                            child: const Text('SHARE'),
-                            onPressed: () {
-                              /* ... */
-                            },
-                          ),
+                          Container(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Image.network(jogador.urlFoto),
+                            ],
+                          )),
+                          Container(
+                            color: Colors.black45,
+                            child: Center(
+                              child: Text(
+                                jogador.nome,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 25),
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                    ),
-                  ],
+                      ButtonTheme.bar(
+                        // make buttons use the appropriate styles for cards
+                        child: ButtonBar(
+                          children: <Widget>[
+                            FlatButton(
+                              child: const Text('DETALHES'),
+                              onPressed: () {
+                                _onClickDetails(context, jogador);
+                              },
+                            ),
+                            FlatButton(
+                              child: const Text('SHARE'),
+                              onPressed: () {
+                                /* ... */
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -113,8 +123,6 @@ class _JogadoresListViewState extends State<JogadoresListView> with AutomaticKee
   }
 
   void _onClickDetails(BuildContext context, Jogador jogador) {
-   push(context, JogadorPage(jogador));
+    push(context, JogadorPage(jogador));
   }
-
-
 }
