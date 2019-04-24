@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
 import 'package:clubeathleticoparanaense/features/home/repository/api/JogadorDB.dart';
 import 'package:clubeathleticoparanaense/features/home/repository/api/jogador_api.dart';
@@ -17,5 +19,9 @@ class HomeRepository {
 
   Future getJogadoresFavoritos() {
     return JogadorDB.getInstance().getJogadores();
+  }
+
+  static salvar(c, File fileCamera) {
+
   }
 }

@@ -1,6 +1,8 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
+import 'package:clubeathleticoparanaense/common/utils/nav.dart';
 import 'package:clubeathleticoparanaense/features/home/repository/api/JogadorDB.dart';
 import 'package:clubeathleticoparanaense/features/home/repository/home_repository.dart';
+import 'package:clubeathleticoparanaense/features/newplayer/new_player.dart';
 import 'package:flutter/material.dart';
 
 class JogadorPage extends StatefulWidget {
@@ -25,7 +27,7 @@ class _JogadorPageState extends State<JogadorPage> {
     // todo: Fazer o VM
     final repo = HomeRepository();
 
-    repo.exist(jogador).then((response){
+    repo.exist(jogador).then((response) {
       setState(() {
         _isFavorite = response;
       });
@@ -34,7 +36,6 @@ class _JogadorPageState extends State<JogadorPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(jogador.nome),
@@ -47,7 +48,9 @@ class _JogadorPageState extends State<JogadorPage> {
           ),
           IconButton(
             icon: Icon(Icons.videocam),
-            onPressed: () { _onClickVideo(context); },
+            onPressed: () {
+              _onClickVideo(context);
+            },
           ),
           PopupMenuButton<String>(
             onSelected: (value) {
@@ -95,9 +98,7 @@ class _JogadorPageState extends State<JogadorPage> {
             ],
           ),
         ),
-        Container(
-            padding: EdgeInsets.only(top: 10),
-            child: _bloco1()),
+        Container(padding: EdgeInsets.only(top: 10), child: _bloco1()),
         _bloco2(),
       ]),
     );
@@ -195,5 +196,9 @@ class _JogadorPageState extends State<JogadorPage> {
 
   void _onClickVideo(BuildContext context) {}
 
-  void _onClickPopupMenu(String value) {}
+  void _onClickPopupMenu(String value) {
+    if("Editar" == value) {
+      push(context, NewPlayer(jogador: jogador));
+    }
+  }
 }

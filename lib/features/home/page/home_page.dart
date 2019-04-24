@@ -1,7 +1,9 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
+import 'package:clubeathleticoparanaense/common/utils/nav.dart';
 import 'package:clubeathleticoparanaense/common/utils/prefs.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/jogadores_favorite_list.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/jogadores_list.dart';
+import 'package:clubeathleticoparanaense/features/newplayer/new_player.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -70,6 +72,12 @@ class _HomePageState extends State<HomePage>
         JogadoresListView(Posicao.goleiro),
         JogadoresFavoriteListView(),
       ]),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          push(context, NewPlayer());
+        },
+      ),
     );
   }
 }
