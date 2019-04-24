@@ -1,6 +1,6 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
 import 'package:clubeathleticoparanaense/common/utils/nav.dart';
-import 'package:clubeathleticoparanaense/features/home/api/jogador_api.dart';
+import 'package:clubeathleticoparanaense/features/home/repository/home_repository.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/detail/jogador_page.dart';
 import 'package:flutter/material.dart';
 
@@ -25,12 +25,16 @@ class _JogadoresListViewState extends State<JogadoresListView>
   }
 
   Container __body() {
+
+    // todo: Fazer o VM
+    final repo = HomeRepository();
+
     Future future = widget.posicao == ""
-        ? JogadorApi.getJogadores()
-        : JogadorApi.getJogadoresPorPosicao(widget.posicao);
+            ? repo.getJogadores()
+            : repo.getJogadoresPorPosicao(widget.posicao);
 
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: FutureBuilder<List<Jogador>>(
           future: future,
           builder: (context, snapshot) {
@@ -56,7 +60,7 @@ class _JogadoresListViewState extends State<JogadoresListView>
         itemCount: jogadores.length,
         itemBuilder: (ctx, idx) {
           final jogador = jogadores[idx];
-          print(jogador.toString());
+
           return InkWell(
             onTap: () {
               _onClickDetails(context, jogador);
@@ -67,20 +71,20 @@ class _JogadoresListViewState extends State<JogadoresListView>
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage("img/cap.png"), fit: BoxFit.cover)),
-                  padding: EdgeInsets.only(bottom: 16, top: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Stack(
                         children: <Widget>[
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              padding: EdgeInsets.only(top: 20, right: 20),
+                              child: Image.network(jogador.urlFoto, width: 100,),
+                            ),
+                          ),
                           Container(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Image.network(jogador.urlFoto),
-                            ],
-                          )),
-                          Container(
+                            padding: EdgeInsets.all(5),
                             color: Colors.black45,
                             child: Center(
                               child: Text(

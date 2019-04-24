@@ -1,21 +1,20 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
 import 'package:clubeathleticoparanaense/common/utils/nav.dart';
-import 'package:clubeathleticoparanaense/features/home/api/JogadorDB.dart';
+import 'package:clubeathleticoparanaense/features/home/repository/home_repository.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/detail/jogador_page.dart';
 import 'package:flutter/material.dart';
 
 class JogadoresFavoriteListView extends StatefulWidget {
-
   const JogadoresFavoriteListView();
 
   @override
-  _JogadoresFavoriteListViewState createState() =>
-      _JogadoresFavoriteListViewState();
+  _JogadoresFavoriteListViewState createState() => _JogadoresFavoriteListViewState();
 }
 
 class _JogadoresFavoriteListViewState extends State<JogadoresFavoriteListView>
     with AutomaticKeepAliveClientMixin<JogadoresFavoriteListView> {
   @override
+  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   @override
@@ -24,16 +23,20 @@ class _JogadoresFavoriteListViewState extends State<JogadoresFavoriteListView>
   }
 
   Container __body() {
+    // todo: Fazer o VM
+    final repo = HomeRepository();
+
+    Future future = repo.getJogadoresFavoritos();
 
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: FutureBuilder<List<Jogador>>(
-          future: JogadorDB.getInstance().getJogadores(),
+          future: future,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(
                   child: Text(
-                "Nenhum jogador na lista do db favoritado.",
+                "Nenhum jogador na lista do servidor.",
                 style: TextStyle(fontSize: 25, color: Colors.redAccent),
               ));
             } else if (!snapshot.hasData) {
@@ -52,54 +55,68 @@ class _JogadoresFavoriteListViewState extends State<JogadoresFavoriteListView>
         itemCount: jogadores.length,
         itemBuilder: (ctx, idx) {
           final jogador = jogadores[idx];
-          print(jogador.toString());
+
           return InkWell(
             onTap: () {
               _onClickDetails(context, jogador);
             },
             child: Container(
               child: Card(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: <Widget>[
-                        Image.network(jogador.urlFoto),
-                        Container(
-                          color: Colors.black45,
-                          child: Center(
-                            child: Text(
-                              jogador.nome,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 25),
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("img/cap.png"), fit: BoxFit.cover)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              padding: EdgeInsets.only(top: 20, right: 20),
+                              child: Image.network(
+                                jogador.urlFoto,
+                                width: 100,
+                              ),
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                    ButtonTheme.bar(
-                      // make buttons use the appropriate styles for cards
-                      child: ButtonBar(
-                        children: <Widget>[
-                          FlatButton(
-                            child: const Text('DETALHES'),
-                            onPressed: () {
-                              _onClickDetails(context, jogador);
-                            },
-                          ),
-                          FlatButton(
-                            child: const Text('SHARE'),
-                            onPressed: () {
-                              /* ... */
-                            },
-                          ),
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            color: Colors.black45,
+                            child: Center(
+                              child: Text(
+                                jogador.nome,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 25),
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                    ),
-                  ],
+                      ButtonTheme.bar(
+                        // make buttons use the appropriate styles for cards
+                        child: ButtonBar(
+                          children: <Widget>[
+                            FlatButton(
+                              child: const Text('DETALHES'),
+                              onPressed: () {
+                                _onClickDetails(context, jogador);
+                              },
+                            ),
+                            FlatButton(
+                              child: const Text('SHARE'),
+                              onPressed: () {
+                                /* ... */
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -1,5 +1,5 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
-import 'package:clubeathleticoparanaense/features/home/api/JogadorDB.dart';
+import 'package:clubeathleticoparanaense/features/home/repository/api/JogadorDB.dart';
 import 'package:clubeathleticoparanaense/features/home/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +22,7 @@ class _JogadorPageState extends State<JogadorPage> {
     // TODO: implement initState
     super.initState();
 
+    // todo: Fazer o VM
     final repo = HomeRepository();
 
     repo.exist(jogador).then((response){

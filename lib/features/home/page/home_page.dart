@@ -3,7 +3,6 @@ import 'package:clubeathleticoparanaense/common/utils/prefs.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/jogadores_favorite_list.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/jogadores_list.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
