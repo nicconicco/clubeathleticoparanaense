@@ -1,5 +1,6 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
 import 'package:clubeathleticoparanaense/features/home/api/JogadorDB.dart';
+import 'package:clubeathleticoparanaense/features/home/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 
 class JogadorPage extends StatefulWidget {
@@ -21,7 +22,9 @@ class _JogadorPageState extends State<JogadorPage> {
     // TODO: implement initState
     super.initState();
 
-    JogadorDB.getInstance().exists(jogador).then((response) {
+    final repo = HomeRepository();
+
+    repo.exist(jogador).then((response){
       setState(() {
         _isFavorite = response;
       });
@@ -30,9 +33,43 @@ class _JogadorPageState extends State<JogadorPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(jogador.nome),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.place),
+            onPressed: () {
+              _onClickMapa(context);
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.videocam),
+            onPressed: () { _onClickVideo(context); },
+          ),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              _onClickPopupMenu(value);
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  value: "Editar",
+                  child: Text("Editar"),
+                ),
+                PopupMenuItem(
+                  value: "Deletar",
+                  child: Text("Deletar"),
+                ),
+                PopupMenuItem(
+                  value: "Share",
+                  child: Text("Share"),
+                )
+              ];
+            },
+          )
+        ],
       ),
       body: _body(),
     );
@@ -152,4 +189,10 @@ class _JogadorPageState extends State<JogadorPage> {
       ),
     );
   }
+
+  void _onClickMapa(BuildContext context) {}
+
+  void _onClickVideo(BuildContext context) {}
+
+  void _onClickPopupMenu(String value) {}
 }
