@@ -1,17 +1,22 @@
+import 'package:clubeathleticoparanaense/features/home/home_page_view_model.dart';
 import 'package:clubeathleticoparanaense/features/home/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
-void main() => runApp(MyApp());
+final HomePageViewModel mainPageVM = HomePageViewModel();
+
+void main() => runApp(MyApp(mainPageVM: mainPageVM));
 
 class MyApp extends StatefulWidget {
+  final HomePageViewModel mainPageVM;
+  MyApp({@required this.mainPageVM});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  _MyAppState createState() => _MyAppState(mainPageVM);
 }
 
 class _MyAppState extends State<MyApp> {
-//  DietPlanRepository dietPlanRepo;
-//  UserRepository userRepo;
+  _MyAppState(HomePageViewModel mainPageVM);
 
   @override
   void initState() {
@@ -27,13 +32,12 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: HomePage(),
+      home: HomePage(viewModel: widget.mainPageVM),
     );
   }
 }
 
 Future<void> initData() async {
-
   // Initialize parse
   Parse().initialize("ntAhu42wPmEvdbCYhOWkDRk3N4TQWRop4gjgBcc5",
       "https://parseapi.back4app.com/",
@@ -47,4 +51,3 @@ Future<void> initData() async {
     print('Server health check failed');
   }
 }
-

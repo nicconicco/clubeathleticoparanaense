@@ -3,12 +3,18 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
 import 'package:clubeathleticoparanaense/common/utils/nav.dart';
 import 'package:clubeathleticoparanaense/common/utils/prefs.dart';
+import 'package:clubeathleticoparanaense/features/home/home_page_view_model.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/jogadores_favorite_list.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/jogadores_list.dart';
 import 'package:clubeathleticoparanaense/features/newplayer/new_player.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class HomePage extends StatefulWidget {
+  final HomePageViewModel viewModel;
+
+  const HomePage({Key key, this.viewModel}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -17,12 +23,21 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin<HomePage> {
   TabController tabController;
 
+  Future loadData() async {
+    await widget.viewModel.setJogadores();
+//    await widget.viewModel.setFilms();
+//    await widget.viewModel.setCharacters();
+//    await widget.viewModel.setPlanets();
+  }
+
   @override
   void initState() {
     super.initState();
 
     tabController = TabController(length: 5, vsync: this);
+    loadData();
 
+    //todo: ver de por no viewmodel..
     Prefs.getInt("tabIndex").then((idx) {
       tabController.index = idx;
     });
@@ -40,10 +55,6 @@ class _HomePageState extends State<HomePage>
       appBar: AppBar(
         title: Text("Clube Atlhetico Paranaense"),
         bottom: TabBar(controller: tabController, tabs: [
-//          Tab(
-//            icon: Icon(Icons.directions_run),
-//            text: "Todos",
-//          ),
           Tab(
             icon: Icon(Icons.directions_run),
             text: "Atacantes",
@@ -66,14 +77,17 @@ class _HomePageState extends State<HomePage>
           ),
         ]),
       ),
-      body: TabBarView(controller: tabController, children: [
+      body: ScopedModel<HomePageViewModel>(
+        model: widget.viewModel,
+        child: TabBarView(controller: tabController, children: [
 //        JogadoresListView(""),
-        JogadoresListView(Posicao.atacante),
-        JogadoresListView(Posicao.meio_centro),
-        JogadoresListView(Posicao.defesa),
-        JogadoresListView(Posicao.goleiro),
-        JogadoresFavoriteListView(),
-      ]),
+          JogadoresListView(Posicao.atacante),
+          JogadoresListView(Posicao.meio_centro),
+          JogadoresListView(Posicao.defesa),
+          JogadoresListView(Posicao.goleiro),
+          JogadoresFavoriteListView(),
+        ]),
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -81,5 +95,11 @@ class _HomePageState extends State<HomePage>
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    tabController?.dispose();
+    super.dispose();
   }
 }

@@ -173,7 +173,7 @@ class _NewPlayerState extends State<NewPlayer> {
               height: 150,
             )
           : Image.asset(
-              "img/camera.png",
+              "img/cam.png",
               height: 100,
             ),
       onTap: _onClickFoto,
@@ -181,9 +181,12 @@ class _NewPlayerState extends State<NewPlayer> {
   }
 
   _onClickFoto() async {
-    fileCamera = await ImagePicker.pickImage(source: ImageSource.camera);
 
-    setState(() {});
+    fileCamera = await ImagePicker.
+    pickImage(source: ImageSource.camera);
+
+    setState(() {
+    });
   }
 
   _radioTipo() {

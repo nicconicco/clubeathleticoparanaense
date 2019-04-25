@@ -9,6 +9,7 @@ import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
 class JogadorApi {
+
   static Future<List<Jogador>> getJogadores() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     print(connectivityResult);

@@ -5,7 +5,6 @@ import 'package:clubeathleticoparanaense/features/home/repository/api/JogadorDB.
 import 'package:clubeathleticoparanaense/features/home/repository/api/jogador_api.dart';
 
 class HomeRepository {
-  static const _onTimeOut = const Duration(seconds: 3);
 
   Future<bool> exist(Jogador jogador) async {
     return JogadorDB.getInstance().exists(jogador);

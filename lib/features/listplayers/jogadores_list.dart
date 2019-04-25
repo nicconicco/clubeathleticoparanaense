@@ -1,8 +1,11 @@
 import 'package:clubeathleticoparanaense/common/clazz/jogador.dart';
 import 'package:clubeathleticoparanaense/common/utils/nav.dart';
+import 'package:clubeathleticoparanaense/features/home/home_page_view_model.dart';
+import 'package:clubeathleticoparanaense/features/home/page/no_internet_connection.dart';
 import 'package:clubeathleticoparanaense/features/home/repository/home_repository.dart';
 import 'package:clubeathleticoparanaense/features/listplayers/detail/jogador_page.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class JogadoresListView extends StatefulWidget {
   final String posicao;
@@ -16,22 +19,21 @@ class JogadoresListView extends StatefulWidget {
 class _JogadoresListViewState extends State<JogadoresListView>
     with AutomaticKeepAliveClientMixin<JogadoresListView> {
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     return __body();
+//    return __bodyVMDescendant();
   }
 
   Container __body() {
-
     // todo: Fazer o VM
     final repo = HomeRepository();
 
     Future future = widget.posicao == ""
-            ? repo.getJogadores()
-            : repo.getJogadoresPorPosicao(widget.posicao);
+        ? repo.getJogadores()
+        : repo.getJogadoresPorPosicao(widget.posicao);
 
     return Container(
       padding: EdgeInsets.only(top: 16, left: 16, right: 16),
@@ -80,7 +82,10 @@ class _JogadoresListViewState extends State<JogadoresListView>
                             alignment: Alignment.centerRight,
                             child: Container(
                               padding: EdgeInsets.only(top: 20, right: 20),
-                              child: Image.network(jogador.urlFoto, width: 100,),
+                              child: Image.network(
+                                jogador.urlFoto,
+                                width: 100,
+                              ),
                             ),
                           ),
                           Container(
@@ -128,5 +133,36 @@ class _JogadoresListViewState extends State<JogadoresListView>
 
   void _onClickDetails(BuildContext context, Jogador jogador) {
     push(context, JogadorPage(jogador));
+  }
+
+  Widget __bodyVMDescendant() {
+    return ScopedModelDescendant<HomePageViewModel>(
+      builder: (context, child, model) {
+        return Container(
+          padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+          child: FutureBuilder<List<Jogador>>(
+            future: model.jogadores,
+            builder: (_, AsyncSnapshot<List<Jogador>> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.active:
+                case ConnectionState.waiting:
+                  return Center(child: const CircularProgressIndicator());
+                case ConnectionState.done:
+                  if (snapshot.hasData) {
+                    _listView(snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return NoInternetConnection(
+                      action: () async {
+                        await model.setJogadores();
+                      },
+                    );
+                  }
+              }
+            },
+          ),
+        );
+      },
+    );
   }
 }
