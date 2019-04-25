@@ -15,7 +15,13 @@ class Jogador {
   String urlFoto;
   String descricao;
 
-  Jogador({this.id, this.nome, this.urlFoto, this.posicao, this.descricao, this.objectId});
+  Jogador(
+      {this.id,
+      this.nome,
+      this.urlFoto,
+      this.posicao,
+      this.descricao,
+      this.objectId});
 
   factory Jogador.fromJson(Map<String, dynamic> parsedJson) {
     return Jogador(
@@ -26,6 +32,10 @@ class Jogador {
       urlFoto: parsedJson['urlFoto'] as String,
       descricao: parsedJson['descricao'] as String,
     );
+  }
+
+  String get msg {
+    return this != null ? "Jogador salvo com sucesso" : "Algum erro aconteceu";
   }
 
   Map toMap() {
@@ -46,5 +56,9 @@ class Jogador {
   @override
   String toString() {
     return "Jogador[$id]: $nome";
+  }
+
+  bool isOk() {
+    return this != null;
   }
 }

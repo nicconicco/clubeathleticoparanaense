@@ -168,7 +168,10 @@ class _NewPlayerState extends State<NewPlayer> {
 
     return InkWell(
       child: jogador != null && jogador.urlFoto != null
-          ? Image.network(jogador.urlFoto, height: 150,)
+          ? Image.network(
+              jogador.urlFoto,
+              height: 150,
+            )
           : Image.asset(
               "img/camera.png",
               height: 100,

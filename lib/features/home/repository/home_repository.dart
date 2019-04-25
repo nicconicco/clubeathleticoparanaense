@@ -5,6 +5,8 @@ import 'package:clubeathleticoparanaense/features/home/repository/api/JogadorDB.
 import 'package:clubeathleticoparanaense/features/home/repository/api/jogador_api.dart';
 
 class HomeRepository {
+  static const _onTimeOut = const Duration(seconds: 3);
+
   Future<bool> exist(Jogador jogador) async {
     return JogadorDB.getInstance().exists(jogador);
   }
@@ -21,7 +23,7 @@ class HomeRepository {
     return JogadorDB.getInstance().getJogadores();
   }
 
-  static salvar(c, File fileCamera) {
-
+  static Future<Jogador> salvar(Jogador c, File file) async {
+    return JogadorApi.salvar(c, file);
   }
 }
